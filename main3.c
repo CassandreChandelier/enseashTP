@@ -25,7 +25,7 @@ int main() {
 
         // Check for 'exit' or Ctrl+D to quit
         if (command_size == 0 || (command_size == 5 && strncmp(buf, "exit\n", 5) == 0)) {
-            write(STDOUT_FILENO, "Bye\n", strlen("Bye\n"));
+            write(STDOUT_FILENO, "Bye Bye\n", strlen("Bye Bye\n"));
             break; // Exit the loop if 'exit' or Ctrl+D is entered
         }
 
