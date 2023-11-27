@@ -1,8 +1,5 @@
 //
 // Created by cassa on 27/11/2023.
-#include <unistd.h> // for write
-#include <string.h> // for strlen
-
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,8 +21,14 @@ int main() {
             break;
         }
 
-        // Execute the command
+        // Check if the command is "exit" to terminate the loop
         command[bytesRead - 1] = '\0'; // Remove newline character from the input
+        if (strcmp(command, "exit") == 0) {
+            write(STDOUT_FILENO, "Bye bye\n", 8);
+            break;
+        }
+
+        // Execute the command
         int child_pid = fork();
 
         if (child_pid < 0) {
@@ -45,4 +48,5 @@ int main() {
 
     return 0;
 }
+
 
