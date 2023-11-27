@@ -11,7 +11,7 @@ int main() {
     // question 1 initial prompt
     char welcomeMsg[] = "Welcome to ENSEA Tiny Shell.\nType 'exit' to quit.\nenseash % ";
     // Display welcome message
-    write(STDOUT_FILENO, welcomeMsg, strlen(welcomeMsg));
+    //write(STDOUT_FILENO, welcomeMsg, strlen(welcomeMsg));
     char buf[MAX_COMMAND_LENGTH];
     ssize_t command_size;
     // Read and execute commands in a loop
