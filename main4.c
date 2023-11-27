@@ -6,7 +6,7 @@
 
 #define MAX_COMMAND_LENGTH 100
 
-int main4() {
+int main() {
     char command[MAX_COMMAND_LENGTH];
     char prompt[] = "enseash % ";
     int status = 0; // Variable to store the return code or signal

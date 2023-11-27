@@ -1,24 +1,21 @@
-//
-// Created by cassa on 27/11/2023.
+//This is the code for the second question : Execution of the entered command and return to the prompt 
 #include <unistd.h> // for write
 #include <string.h> // for strlen
+#include <stdlib.h> //for exit
+#include <unistd.h> // for read, fork, and for constants like STDOUT_FILENO and STDIN_FILENO.
+#include <sys/wait.h> //for wait function
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/wait.h>
+#define MAX_COMMAND_LENGTH 100 //Sets the maximum length of the command that can be entered by the user. 
 
-#define MAX_COMMAND_LENGTH 100
-
-int main2() {
-    char command[MAX_COMMAND_LENGTH];
-    char prompt[] = "enseash % ";
+int main() {
+    char command[MAX_COMMAND_LENGTH];// to store the entered command
+    char prompt[] = "enseash % ";//the prompt displayed to the user
 
     while (1) {
         write(STDOUT_FILENO, prompt, strlen(prompt)); // Print the prompt
 
        // Reading the command entered by the user
-        ssize_t bytesRead = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);
+        ssize_t bytesRead = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);//Reads the command entered by the user in the input and stores it in the command array.
         if (bytesRead <= 0) {
             write(STDOUT_FILENO, "\n", 1);  // Printing a newline and exit on empty input or error
             break;

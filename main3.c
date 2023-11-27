@@ -1,3 +1,4 @@
+//for the includes look at main2.c
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,7 +6,7 @@
 
 #define MAX_COMMAND_LENGTH 100
 
-int main3() {
+int main() {
     char command[MAX_COMMAND_LENGTH];
     char prompt[] = "enseash % ";//what the user enters
 
