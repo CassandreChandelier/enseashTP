@@ -3,7 +3,6 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <stdio.h>
-
 #define MAX_COMMAND_LENGTH 100
 
 int main() {

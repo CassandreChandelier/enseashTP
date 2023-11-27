@@ -1,6 +1,6 @@
 #include <unistd.h> // for write
 #include <string.h> // for strlen
-#include "fonction.h"
+
 
 //First question : Display a welcome message, followed by a simple prompt
 int main() {
