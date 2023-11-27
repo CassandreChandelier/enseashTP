@@ -10,7 +10,7 @@
 
 #define MAX_COMMAND_LENGTH 100
 
-int main() {
+int main2() {
     char command[MAX_COMMAND_LENGTH];
     char prompt[] = "enseash % ";
 
