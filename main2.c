@@ -2,44 +2,35 @@
 #include <unistd.h> // for write
 #include <string.h> // for strlen
 #include <stdlib.h> //for exit
-#include <unistd.h> // for read, fork, and for constants like STDOUT_FILENO and STDIN_FILENO.
-#include <sys/wait.h> //for wait function
-
-#define MAX_COMMAND_LENGTH 100 //Sets the maximum length of the command that can be entered by the user. 
+#include "fonctions.h"
+#include <sys/wait.h> //for wait 
 
 int main() {
-    char command[MAX_COMMAND_LENGTH];// to store the entered command
-    char prompt[] = "enseash % ";//the prompt displayed to the user
+    char welcomeMsg[] = "Welcome to ENSEA Tiny Shell.\nType 'exit' to quit.\nenseash % "; //message to display
+    char buf[MAX_COMMAND_LENGTH]
+    ssize_t command_size;
 
-    while (1) {
-        write(STDOUT_FILENO, prompt, strlen(prompt)); // Print the prompt
+    write(1,welcomeMsg,strlen(welcomeMsg));
 
-       // Reading the command entered by the user
-        ssize_t bytesRead = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);//Reads the command entered by the user in the input and stores it in the command array.
-        if (bytesRead <= 0) {
-            write(STDOUT_FILENO, "\n", 1);  // Printing a newline and exit on empty input or error
-            break;
-        }
-
-        // Executing the command
-        command[bytesRead - 1] = '\0'; // To remove newline character from the input
-        int child_pid = fork();
-
-        if (child_pid < 0) {
-            write(STDOUT_FILENO, "Error forking process\n", 22);
-            exit(EXIT_FAILURE);
-        } else if (child_pid == 0) {
-            // Child process
-            execlp(command, command, NULL);  // Executing the command
-           // If execlp returns, a message error is displayed
-            write(STDOUT_FILENO, "Command not found\n", 18);
-            exit(EXIT_FAILURE);
-        } else {
-            // Parent process waits for child to finish (td)
-            wait(NULL);
-        }
+    while(1){
+        write(1,"%",strlen("%"));
+        command_size=read(0,buf,MAX_COMMAND_LENGTH);
+        execute_command(buf, command_size);
     }
-
     return 0;
 }
 
+void execute_command(char *buf, ssize_t, command_size){
+    int pid,status;
+    buf[command_size - 1]='\0';
+    pid=fork();
+
+    if (pid!=0){//The father waits for the child to execute
+        //write(1,"father",strlen("father"));
+        wait(status);
+    }
+    else{
+        execlp(buf,buf,(char*)NULL);
+        exit(EXIT_SUCCESS);
+    }
+}

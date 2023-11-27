@@ -3,8 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/wait.h>
+#include "fonctions.h"
 
-#define MAX_COMMAND_LENGTH 100
+
 
 int main() {
     char command[MAX_COMMAND_LENGTH];
@@ -35,7 +36,7 @@ int main() {
             exit(EXIT_FAILURE);
         } else if (child_pid == 0) {
             // Child process :
-            execlp(command, command, NULL); // Executing the command
+            execlp(command, command, NULL); // Here we use 'execlp' so that we don't have to write all of the file path 
             // If execlp returns, a message error is displayed
             write(STDOUT_FILENO, "Command not found\n", 18);
             exit(EXIT_FAILURE);
