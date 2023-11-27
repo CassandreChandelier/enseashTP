@@ -17,15 +17,15 @@ int main() {
     while (1) {
         write(STDOUT_FILENO, prompt, strlen(prompt)); // Print the prompt
 
-        // Read the command entered by the user
+       // Reading the command entered by the user
         ssize_t bytesRead = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);
         if (bytesRead <= 0) {
-            write(STDOUT_FILENO, "\n", 1); // Print a newline and exit on empty input or error
+            write(STDOUT_FILENO, "\n", 1);  // Printing a newline and exit on empty input or error
             break;
         }
 
-        // Execute the command
-        command[bytesRead - 1] = '\0'; // Remove newline character from the input
+        // Executing the command
+        command[bytesRead - 1] = '\0'; // To remove newline character from the input
         int child_pid = fork();
 
         if (child_pid < 0) {
@@ -33,8 +33,8 @@ int main() {
             exit(EXIT_FAILURE);
         } else if (child_pid == 0) {
             // Child process
-            execlp(command, command, NULL); // Execute the command
-            // If execlp returns, an error occurred
+            execlp(command, command, NULL);  // Executing the command
+           // If execlp returns, a message error is displayed
             write(STDOUT_FILENO, "Command not found\n", 18);
             exit(EXIT_FAILURE);
         } else {
