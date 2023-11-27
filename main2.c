@@ -10,36 +10,36 @@ int main() {
     char prompt[] = "enseash % ";
 
     while (1) {
-        write(STDOUT_FILENO, prompt, strlen(prompt)); // Print the prompt
+        write(STDOUT_FILENO, prompt, strlen(prompt)); 
 
-        // Read the command entered by the user
+        // Reading the command entered by the user
         ssize_t bytesRead = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);
         if (bytesRead <= 0) {
-            write(STDOUT_FILENO, "\n", 1); // Print a newline and exit on empty input or error
+            write(STDOUT_FILENO, "\n", 1); // Printing a newline and exit on empty input or error
             break;
         }
 
-        // Check if the command is "exit" to terminate the loop
-        command[bytesRead - 1] = '\0'; // Remove newline character from the input
+        // If the command is "exit" then terminate the loop
+        command[bytesRead - 1] = '\0'; // To remove newline character from the input
         if (strcmp(command, "exit") == 0) {
             write(STDOUT_FILENO, "Bye bye\n", 8);
             break;
         }
 
-        // Execute the command
+        // Executing the command
         int child_pid = fork();
 
         if (child_pid < 0) {
             write(STDOUT_FILENO, "Error forking process\n", 22);
             exit(EXIT_FAILURE);
         } else if (child_pid == 0) {
-            // Child process
-            execlp(command, command, NULL); // Execute the command
-            // If execlp returns, an error occurred
+            // Child process :
+            execlp(command, command, NULL); // Executing the command
+            // If execlp returns, a message error is displayed
             write(STDOUT_FILENO, "Command not found\n", 18);
             exit(EXIT_FAILURE);
         } else {
-            // Parent process waits for child to finish
+            // The parent process has to wait for the child to finish
             wait(NULL);
         }
     }
