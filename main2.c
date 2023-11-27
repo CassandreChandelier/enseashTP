@@ -2,7 +2,7 @@
 #include <unistd.h> // for write
 #include <string.h> // for strlen
 #include <stdlib.h> //for exit
-#include "fonctions.h"
+#include "fonction.h"
 #include <sys/wait.h> //for wait 
 
 int main() {
