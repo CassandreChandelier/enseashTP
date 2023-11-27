@@ -1,49 +1,57 @@
-//for the includes look at main2.c
 #include <unistd.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 #include <sys/wait.h>
+
 #define MAX_COMMAND_LENGTH 100
 
+void execute_command(char *buf, ssize_t command_size);
 
 int main() {
-    char command[MAX_COMMAND_LENGTH];
-    char prompt[] = "enseash % ";//what the user enters
+    // Welcome message and initial prompt
+    char welcomeMsg[] = "Welcome to ENSEA Tiny Shell.\nType 'exit' or Ctrl+D to quit.\nenseash % ";
+    // Display welcome message
+    //write(STDOUT_FILENO, welcomeMsg, strlen(welcomeMsg));
+    char buf[MAX_COMMAND_LENGTH];
+    ssize_t command_size;
 
-    while (1) {
-        write(STDOUT_FILENO, prompt, strlen(prompt)); 
+    // Read and execute commands in a loop
+    while(1) {
+        // Display prompt for user input
+        write(STDOUT_FILENO, "enseash % ", strlen("enseash % "));
 
-        // Reading the command entered by the user
-        ssize_t bytesRead = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);
-        if (bytesRead <= 0) {
-            write(STDOUT_FILENO, "\n", 1); // Printing a newline and exit on empty input or error
-            break;
+        // Read the command entered by the user
+        command_size = read(STDIN_FILENO, buf, MAX_COMMAND_LENGTH);
+
+        // Check for 'exit' or Ctrl+D to quit
+        if (command_size == 0 || (command_size == 5 && strncmp(buf, "exit\n", 5) == 0)) {
+            write(STDOUT_FILENO, "Bye\n", strlen("Bye\n"));
+            break; // Exit the loop if 'exit' or Ctrl+D is entered
         }
 
-        // If the command is "exit" then terminate the loop
-        command[bytesRead - 1] = '\0'; // To remove newline character from the input
-        if (strcmp(command, "exit") == 0) {
-            write(STDOUT_FILENO, "Bye bye\n", 8);
-            break;
-        }
-
-        // Executing the command
-        int child_pid = fork();
-
-        if (child_pid < 0) {
-            write(STDOUT_FILENO, "Error forking process\n", 22);
-            exit(EXIT_FAILURE);
-        } else if (child_pid == 0) {
-            // Child process :
-            execlp(command, command, NULL); // Here we use 'execlp' so that we don't have to write all of the file path 
-            // If execlp returns, a message error is displayed
-            write(STDOUT_FILENO, "Command not found\n", 18);
-            exit(EXIT_FAILURE);
-        } else {
-            // The parent process has to wait for the child to finish
-            wait(NULL);
-        }
+        // Execute the entered command
+        execute_command(buf, command_size);
     }
-
     return 0;
 }
+
+// Function to execute the entered command
+void execute_command(char *buf, ssize_t command_size) {
+    int pid, status;
+
+    // Ensure null termination of the command string
+    buf[command_size - 1] = '\0';
+
+    // Create a child process to execute the command
+    pid = fork();
+
+    if (pid != 0) {
+        // Parent process waits for the child process to finish
+        waitpid(pid, &status, 0);
+    } else {
+        // Child process executes the command
+        execlp(buf, buf, (char*)NULL);
+        exit(EXIT_SUCCESS);
+    }
+}
+
