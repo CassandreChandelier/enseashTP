@@ -7,7 +7,7 @@
 
 int main() {
     char welcomeMsg[] = "Welcome to ENSEA Tiny Shell.\nType 'exit' to quit.\nenseash % "; //message to display
-    char buf[MAX_COMMAND_LENGTH]
+    char buf[MAX_COMMAND_LENGTH];
     ssize_t command_size;
 
     write(1,welcomeMsg,strlen(welcomeMsg));
