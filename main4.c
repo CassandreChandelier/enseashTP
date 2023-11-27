@@ -12,19 +12,8 @@ int main() {
     int status = 0; // Variable to store the return code or signal
 
     while (1) {
-        // Display prompt with return code or signal from previous command
-        if (WIFEXITED(status)) {
-            // Command exited normally
-            snprintf(prompt, sizeof(prompt), "enseash [exit:%d] %% ", WEXITSTATUS(status));
-        } else if (WIFSIGNALED(status)) {
-            // Command terminated by signal
-            snprintf(prompt, sizeof(prompt), "enseash [sign:%d] %% ", WTERMSIG(status));
-        } else {
-            // No previous command or unknown status
-            snprintf(prompt, sizeof(prompt), "enseash %% ");
-        }
-
-        write(STDOUT_FILENO, prompt, strlen(prompt)); // Print the prompt
+        // Display prompt before user input
+        write(STDOUT_FILENO, prompt, strlen(prompt));
 
         // Read the command entered by the user
         ssize_t bytesRead = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);
@@ -55,8 +44,18 @@ int main() {
         } else {
             // Parent process waits for child to finish
             waitpid(child_pid, &status, 0);
+
+            // Display appropriate prompt based on the exit status or signal
+            if (WIFEXITED(status)) {
+                // Command exited normally
+                snprintf(prompt, sizeof(prompt), "enseash [exit:%d] %% ", WEXITSTATUS(status));
+            } else if (WIFSIGNALED(status)) {
+                // Command terminated by signal
+                snprintf(prompt, sizeof(prompt), "enseash [sign:%d] %% ", WTERMSIG(status));
+            }
         }
     }
 
     return 0;
 }
+
